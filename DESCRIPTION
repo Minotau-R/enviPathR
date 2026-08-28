@@ -1,0 +1,15 @@
+Package: enviPathR
+Title: R Port to enviPath API
+Version: 0.0.0.9000
+Authors@R: 
+    person("Giulio", "Benedetti", , "giulio.benedetti@utu.fi", role = c("aut", "cre"))
+Description: What the package does (one paragraph).
+Imports:
+    httr2,
+    jsonlite,
+    stringr,
+    tools
+License: Artistic-2.0
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 8.0.0
