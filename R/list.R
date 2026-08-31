@@ -2,11 +2,11 @@
 #' @importFrom httr2 req_url_path_append req_cookie_preserve req_perform resp_body_json
 #' @importFrom stringr str_remove
 #' @export
-ep_list <- function(x, pkg = NULL){
+epList <- function(type, pkg = NULL){
     
     is_pkg <- !is.null(pkg)
     
-    if( x == "package" && is_pkg ){
+    if( type == "package" && is_pkg ){
         stop("'pkg' cannot be defined when listing packages.", call. = FALSE)
     }
     
@@ -15,7 +15,7 @@ ep_list <- function(x, pkg = NULL){
     
     if( is_pkg ) req <- req_url_path_append(req, "package", pkg)
         
-    req <- req_url_path_append(req, x)
+    req <- req_url_path_append(req, type)
     
     resp <- req_perform(req)
     
@@ -27,7 +27,7 @@ ep_list <- function(x, pkg = NULL){
     
     to_keep <- c("name", "id", "reviewStatus")
     
-    if( x == "package" ){
+    if( type == "package" ){
       
         obj.types <- names(df$links[[1L]])
         obj.counts <- vapply(obj.types, .extract_obj_counts, numeric(nrow(df)), df)

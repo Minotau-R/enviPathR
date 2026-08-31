@@ -2,7 +2,6 @@
 # relevant object types:
 # package, compound, reaction, pathway (node & edge)
 
-
 # relevant relations:
 
 # compound -> pathway
@@ -23,97 +22,46 @@
 # reaction -> ec (always empty, report)
 # compound -> chebi (always empty, report)
 
-# Could we get full rxn and full cpd dfs?
+# Could we get full rxn and full cpd dfs from path?
 
+epLogin("X", "Y")
 
-ep_login("X", "Y")
-
-pkg_df <- ep_list("package")
-
+pkg_df <- epList("package")
 
 pkg_name <- "EAWAG-BBD"
 pkg_id <- pkg_df$id[pkg_df$name == pkg_name]
 
-path_df <- ep_list("pathway", pkg = pkg_id)
-
+path_df <- epList("pathway", pkg = pkg_id)
 
 path_name <- "Naphthalene"
 path_id <- path_df$id[path_df$name == path_name]
 
-ep_pathway <- function(path, pkg, what){
-    
-    req <- request(ep_url) |>
-        req_url_path_append("package", pkg, "pathway", path, what) |>
-        req_cookie_preserve(path = cookie_file)
-    
-    resp <- req_perform(req)
-    
-    out <- resp_body_json(resp, simplifyVector = TRUE)
-    
-    df <- out[[1L]]
-    
-    df$id <- str_remove(df$id, ".*/")
-    
-    df <- df[ , c("name", "id", "reviewStatus")]
-    return(df)
-}
+rule_df <- epList("rule", pkg = pkg_id)
+rule_id <- "507b2719-da61-4793-87fc-2d4ae9c20ce9"
 
-edge_df <- ep_pathway(path_id, pkg_id, "edge")
-node_df <- ep_pathway(path_id, pkg_id, "node")
+rxn_df <- epList("reaction", pkg = pkg_id)
+cpd_df <- epList("compound", pkg = pkg_id)
 
-pkg <- pkg_id
-path <- path_id
-edge <- edge_df$id[1]
-node <- node_df$id[1]
+rxn2path <- epLink("reaction", "pathways", rxn_df$id[1:10])
 
-req <- request(ep_url) |>
-    req_url_path_append("package", pkg, "pathway", path, "node", node) |>
-    req_cookie_preserve(path = cookie_file)
+cpd2rxn <- epLink("compound", "reactions", cpd_df$id[1:10])
 
-resp <- req_perform(req)
+cpd2path <- epLink("compound", "pathways", cpd_df$id[1:10])
 
-out <- resp_body_json(resp, simplifyVector = TRUE)
+# epLink("compound", "structures", cpd_id)
+# epLink("pathway", "nodes", path_id)
+# epLink("pathway", "links", path_id)
 
-
-
-
-
-ep_compound <- function(cpd, pkg, what = NULL){
-    
-    req <- request(ep_url) |>
-        req_url_path_append("package", pkg, "compound", cpd, what) |>
-        req_cookie_preserve(path = cookie_file)
-    
-    resp <- req_perform(req)
-    
-    out <- resp_body_json(resp, simplifyVector = TRUE)
-    
-    df <- out[[1L]]
-    
-    df$id <- str_remove(df$id, ".*/")
-    
-    df <- df[ , c("name", "id", "reviewStatus")]
-    return(df)
-}
-
-
-cpd_df <- ep_list("compound", pkg_id)
+cpd_df <- epList("compound", pkg_id)
 
 cpd_name <- "1-Methylnaphthalene"
 cpd_id <- cpd_df$id[cpd_df$name == cpd_name]
 
-ep_compound(cpd_id, pkg_id, "structure")
-ep_compound(cpd_id, pkg_id)
+path_objects <- epGet("pathway", pkg_id, init = path_df$id[1:50])
 
-pkg <- pkg_id
-rxn <- "2b6bbcc5-77f4-4bed-92a9-731cdc978f6a"
+epGet(cpd_id, pkg_id, "structure")
 
-req <- request(ep_url) |>
-    req_url_path_append("package", pkg, "reaction", rxn) |>
-    req_cookie_preserve(path = cookie_file)
+rxn_id <- "2b6bbcc5-77f4-4bed-92a9-731cdc978f6a"
 
-resp <- req_perform(req)
+epGet(rxn_id, "reaction")
 
-out <- resp_body_json(resp, simplifyVector = TRUE)
-
-df <- data.frame(out)

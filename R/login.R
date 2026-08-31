@@ -1,7 +1,7 @@
 
 #' @importFrom httr2 request req_method req_body_form req_cookie_preserve req_perform
 #' @export
-ep_login <- function(username, password){
+epLogin <- function(username, password){
     # Prepare login request
     req <- request(eP_env$url) |>
         req_method("POST") |>
