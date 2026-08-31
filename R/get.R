@@ -1,14 +1,49 @@
+#' Get enviPath objects
+#' 
+#' @name epGet
+#' 
+#' @description
+#' epGet returns a raw object from enviPath.
+#' 
+#' @param type \code{Character scalar}.
+#' 
+#' @param init \code{Character vector}.
+#' 
+#' @param pkg \code{Character scalar}.
+#' 
+#' @param property \code{Character scalar}.
+#' 
+#' @returns
+#' A list of objects
+#' 
+#' @examples
+#' rxn_id <- "2b6bbcc5-77f4-4bed-92a9-731cdc978f6a"
+#' 
+#' epGet("reaction", rxn_id)
+NULL
 
 #' @export
-#' @importFrom BiocParallel bplapply
-epGet <- function(type, pkg, init = NULL, property = NULL){
+#' @rdname epGet
+#' @importFrom BiocParallel bpmapply
+epGet <- function(type, init = NULL, pkg = NULL, property = NULL){
+    
+    if( is.null(pkg) ) pkg <- "32de3cf4-e3e6-4168-956e-32fa5ddb0ce1"
     
     if( is.null(init) ) init <- epList(type, pkg)$id
     
-    out <- bplapply(init, .ep_get, type = type, pkg = pkg, property = property)
+    out <- bpmapply(
+        .ep_get,
+        init,
+        MoreArgs = list(type = type, pkg = pkg, property = property),
+        SIMPLIFY = FALSE
+    )
+    
+    if( length(out) == 1L ) out <- out[[1L]]
+    
     return(out)
 } 
 
+#' @importFrom httr2 request req_url_path_append req_cookie_preserve req_perform resp_body_json
 .ep_get <- function(init, type, pkg, property = NULL){
     
     req <- request(eP_env$url) |>

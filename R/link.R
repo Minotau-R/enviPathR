@@ -1,6 +1,30 @@
+#' Link enviPath objects
+#' 
+#' @name epLink
+#' 
+#' @description
+#' epLink returns mappings between enviPath object types.
+#' 
+#' @param from \code{Character scalar}.
+#' 
+#' @param to \code{Character scalar}.
+#' 
+#' @param init \code{Character vector}.
+#' 
+#' @param pkg \code{Character scalar}.
+#' 
+#' @returns
+#' A data frame with links between from and to.
+#' 
+#' @examples
+#' rxn_id <- "2b6bbcc5-77f4-4bed-92a9-731cdc978f6a"
+#' 
+#' epGet("reaction", rxn_id)
+NULL
 
 #' @export
-#' @importFrom BiocParallel bpmapply
+#' @rdname epLink
+#' @importFrom BiocParallel bplapply
 #' @importFrom stringr str_remove
 epLink <- function(from, to, init = NULL, pkg = NULL){
     
@@ -8,24 +32,20 @@ epLink <- function(from, to, init = NULL, pkg = NULL){
     
     if( is.null(init) ) init <- epList(from, pkg)$id
     
-    out <- bpmapply(
-        .ep_link,
-        init,
-        MoreArgs = list(from = from, to = to, pkg = pkg)
-    )
+    out <- bplapply(init, .ep_link, from = from, to = to, pkg = pkg)
     
-    to_remove <- vapply(out, is.null, logical(1L))
-    out <- out[!to_remove]
+    linkmap <- data.frame(x = rep(init, lengths(out)), y = unlist(out))
+    
+    to_remove <- vapply(linkmap$y, is.null, logical(1L))
+    linkmap <- linkmap[!to_remove, ]
     
     # Remove id prefix
-    out <- str_remove(out, ".*/")
+    linkmap$y <- str_remove(linkmap$y, ".*/")
     
-    df <- data.frame(names(out), out)
+    colnames(linkmap) <- c(from, to)
+    rownames(linkmap) <- NULL
     
-    colnames(df) <- c(from, to)
-    rownames(df) <- NULL
-    
-    return(df)
+    return(linkmap)
 }
 
 

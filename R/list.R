@@ -1,7 +1,27 @@
+#' List enviPath objects
+#' 
+#' @name epList
+#' 
+#' @description
+#' epList returns a list with info on objects available in enviPath.
+#' 
+#' @param type \code{Character scalar}.
+#' 
+#' @param pkg \code{Character scalar}.
+#' 
+#' @returns
+#' A data frame.
+#' 
+#' @examples
+#' epList("package")
+#' 
+#' epList("pathway", pkg = "32de3cf4-e3e6-4168-956e-32fa5ddb0ce1")
+NULL
 
+#' @export
+#' @rdname epList
 #' @importFrom httr2 req_url_path_append req_cookie_preserve req_perform resp_body_json
 #' @importFrom stringr str_remove
-#' @export
 epList <- function(type, pkg = NULL){
     
     is_pkg <- !is.null(pkg)
