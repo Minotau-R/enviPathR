@@ -26,31 +26,53 @@ NULL
 #' @rdname epLink
 #' @importFrom BiocParallel bplapply
 #' @importFrom stringr str_remove
+#' @importFrom stats complete.cases
 epLink <- function(from, to, init = NULL, pkg = NULL){
     
     if( is.null(pkg) ) pkg <- "32de3cf4-e3e6-4168-956e-32fa5ddb0ce1"
     
     if( is.null(init) ) init <- epList(from, pkg)$id
     
-    out <- bplapply(init, .ep_link, from = from, to = to, pkg = pkg)
+    key <- "id"
+    specTo <- paste0(to, "s")
     
-    linkmap <- data.frame(x = rep(init, lengths(out)), y = unlist(out))
+    if( from == "pathway" ){
+        
+        key <- switch(to, reaction = "idreaction", compound = "idcomp", key)
+        
+        specTo <- switch(to, reaction = "edges", compound = "nodes", specTo)
+        
+    }
     
-    to_remove <- vapply(linkmap$y, is.null, logical(1L))
-    linkmap <- linkmap[!to_remove, ]
+    if( specTo == "edges" ) specTo <- "links"
+
+    out <- bplapply(
+        init, .ep_link, from = from, to = specTo, pkg = pkg, key = key
+    )
     
-    # Remove id prefix
-    linkmap$y <- str_remove(linkmap$y, ".*/")
+    linkmap <- data.frame(
+        x = rep(init, lengths(out)),
+        y = unlist(out, use.names = FALSE)
+    )
     
     colnames(linkmap) <- c(from, to)
-    rownames(linkmap) <- NULL
+    
+    if( nrow(linkmap) == 0L ){
+        warning("No bindings found", call. = FALSE)
+        return(linkmap)
+    }
+    
+    linkmap <- linkmap[complete.cases(linkmap[[to]]), ]
+    
+    # Remove id prefix
+    linkmap[to] <- str_remove(linkmap[[to]], ".*/")
     
     return(linkmap)
 }
 
 
 #' @importFrom httr2 request req_url_path_append req_cookie_preserve req_perform resp_body_json
-.ep_link <- function(init, from, to, pkg){
+.ep_link <- function(init, from, to, pkg, key){
     
     req <- request(eP_env$url) |>
         req_url_path_append("package", pkg, from, init) |>
@@ -60,7 +82,7 @@ epLink <- function(from, to, init = NULL, pkg = NULL){
     
     out <- resp_body_json(resp, simplifyVector = TRUE)
     
-    out <- out[[to]]$id
+    out <- out[[to]][[key]]
     
     return(out)
 }

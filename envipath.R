@@ -42,18 +42,24 @@ rule_id <- "507b2719-da61-4793-87fc-2d4ae9c20ce9"
 rxn_df <- epList("reaction", pkg = pkg_id)
 cpd_df <- epList("compound", pkg = pkg_id)
 
-rxn2path <- epLink("reaction", "pathways", rxn_df$id[1:10])
+rxn2path <- epLink("reaction", "pathway", rxn_df$id[1:10])
 
-cpd2rxn <- epLink("compound", "reactions", cpd_df$id[1:10])
+cpd2rxn <- epLink("compound", "reaction", cpd_df$id[1:10])
 
-cpd2path <- epLink("compound", "pathways", cpd_df$id[1:10])
+cpd2path <- epLink("compound", "pathway", cpd_df$id[1:10])
 
-# epLink("compound", "structures", cpd_id)
-# epLink("pathway", "nodes", path_id)
-# epLink("pathway", "links", path_id)
+epLink("pathway", "node", path_df$id[1:10])
+epLink("pathway", "edge", path_df$id[1:10])
+
+# Now giving struct ids (instead of cpd ids)
+epLink("pathway", "compound", path_df$id[1:3])
+# Empty (report)
+epLink("pathway", "reaction", path_df$id[1:3])
 
 cpd_name <- "1-Methylnaphthalene"
 cpd_id <- cpd_df$id[cpd_df$name == cpd_name]
+
+epLink("compound", "structure", cpd_id)
 
 path_objects <- epGet("pathway", path_df$id[1:50], pkg_id)
 

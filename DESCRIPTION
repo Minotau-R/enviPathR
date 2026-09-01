@@ -12,6 +12,7 @@ Description:
 Imports:
     httr2,
     jsonlite,
+    stats,
     stringr,
     tools
 License: Artistic-2.0
