@@ -28,7 +28,7 @@
     cache <- R_user_dir("enviPathR", "cache")
     if( !dir.exists(cache) ) dir.create(cache)
     # Preserve cookies between requests
-    eP_env$cookies <- tempfile("cookies", tmpdir = cache, fileext = ".txt")
+    eP_env$cookies <- file.path(cache, "cookies.txt")
     # Add links
     eP_env$links <- .make_ep_links()
     return(eP_env)
