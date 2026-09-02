@@ -25,6 +25,7 @@ epGet returns a raw object from enviPath.
 \dontshow{
     username <- Sys.getenv("EP_USERNAME")
     password <- Sys.getenv("EP_PASSWORD")
+    eP_env$cookies <- file.path(Sys.getenv("GITHUB_WORKSPACE"), "eP_cookies")
 }
 epLogin(username, password)
 
