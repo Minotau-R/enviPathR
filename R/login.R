@@ -14,8 +14,11 @@
 #' A message upon successful login.
 #' 
 #' @examples
-#' # epLogin("FirstLast", "abc123")
-#' #> Welcome to enviPath!
+#' \dontshow{
+#'     username <- Sys.getenv("EP_USERNAME")
+#'     password <- Sys.getenv("EP_PASSWORD")
+#' }
+#' epLogin(username, password)
 NULL
 
 #' @importFrom httr2 request req_method req_body_form req_cookie_preserve req_perform

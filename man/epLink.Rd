@@ -22,7 +22,7 @@ A data frame with links between from and to.
 epLink returns mappings between enviPath object types.
 }
 \examples{
-#' \dontshow{
+\dontshow{
     username <- Sys.getenv("EP_USERNAME")
     password <- Sys.getenv("EP_PASSWORD")
 }

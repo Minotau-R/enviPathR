@@ -18,7 +18,7 @@ A data frame.
 epList returns a list with info on objects available in enviPath.
 }
 \examples{
-#' \dontshow{
+\dontshow{
     username <- Sys.getenv("EP_USERNAME")
     password <- Sys.getenv("EP_PASSWORD")
 }

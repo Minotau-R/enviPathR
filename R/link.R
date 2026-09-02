@@ -17,7 +17,7 @@
 #' A data frame with links between from and to.
 #' 
 #' @examples
-#' #' \dontshow{
+#' \dontshow{
 #'     username <- Sys.getenv("EP_USERNAME")
 #'     password <- Sys.getenv("EP_PASSWORD")
 #' }

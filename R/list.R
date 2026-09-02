@@ -13,7 +13,7 @@
 #' A data frame.
 #' 
 #' @examples
-#' #' \dontshow{
+#' \dontshow{
 #'     username <- Sys.getenv("EP_USERNAME")
 #'     password <- Sys.getenv("EP_PASSWORD")
 #' }
