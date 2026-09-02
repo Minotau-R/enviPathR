@@ -33,6 +33,6 @@ epLogin <- function(username, password){
     # Perform login request
     resp <- req_perform(req)
     # Print message upon successful login
-    message("Welcome to enviPath!")
+    message("Hi ", username, ", welcome to enviPath!")
     invisible(NULL)
 }

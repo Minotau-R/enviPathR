@@ -1,29 +1,4 @@
 
-# relevant object types:
-# package, compound, reaction, pathway (node & edge)
-
-# relevant relations:
-
-# compound -> pathway
-# pathway -> node -> compound
-
-# reaction -> pathway
-# pathway -> edge -> reaction
-
-# compound -> reaction
-# reaction -> compound
-
-# compound -> smiles
-# compound -> inchi
-
-# reaction -> rhea
-# compound -> inchikey
-
-# reaction -> ec (always empty, report)
-# compound -> chebi (always empty, report)
-
-# Could we get full rxn and full cpd dfs from path?
-
 epLogin("X", "Y")
 
 pkg_df <- epList("package")
@@ -69,3 +44,10 @@ rxn_id <- "2b6bbcc5-77f4-4bed-92a9-731cdc978f6a"
 
 epGet("reaction", rxn_id)
 
+# This throws error when no rxns have rhea
+epLink("reaction", "rhea", rxn_df$id[1:10])
+
+epLink("compound", "inchikey", cpd_id)
+epLink("compound", "smiles", cpd_id)
+
+epLink("reaction", "compound", rxn_df$id[1:10])
