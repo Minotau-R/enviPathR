@@ -10,6 +10,7 @@ Description:
     reactions and produced compounds. This package enables the programmatic
     access to enviPath by porting the database API from R.
 Imports:
+    BiocParallel,
     httr2,
     jsonlite,
     stats,
