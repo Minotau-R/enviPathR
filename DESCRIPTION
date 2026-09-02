@@ -12,7 +12,6 @@ Description:
 Imports:
     BiocParallel,
     httr2,
-    jsonlite,
     stats,
     stringr,
     tools
