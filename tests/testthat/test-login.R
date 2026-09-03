@@ -13,10 +13,5 @@ test_that("login", {
         fixed = TRUE
     )
     
-    expect_message(
-        epLogin(username, password),
-        "Hi RiboRings, welcome to enviPath!",
-        fixed = TRUE
-    )
-    
+    expect_message(epLogin(username, password), "Hi .+, welcome to enviPath!")
 })

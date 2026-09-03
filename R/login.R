@@ -14,11 +14,9 @@
 #' A message upon successful login.
 #' 
 #' @examples
-#' \dontshow{
-#'     username <- Sys.getenv("EP_USERNAME")
-#'     password <- Sys.getenv("EP_PASSWORD")
+#' \donttest{
+#' epLogin("username", "password")
 #' }
-#' epLogin(username, password)
 NULL
 
 #' @importFrom httr2 request req_method req_body_form req_cookie_preserve req_perform

@@ -17,15 +17,13 @@
 #' A list of objects
 #' 
 #' @examples
-#' \dontshow{
-#'     username <- Sys.getenv("EP_USERNAME")
-#'     password <- Sys.getenv("EP_PASSWORD")
-#' }
-#' epLogin(username, password)
+#' \donttest{
+#' epLogin("username", "password")
 #' 
 #' rxn_id <- "2b6bbcc5-77f4-4bed-92a9-731cdc978f6a"
 #' 
 #' epGet("reaction", rxn_id)
+#' }
 NULL
 
 #' @export

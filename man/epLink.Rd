@@ -22,13 +22,11 @@ A data frame with links between from and to.
 epLink returns mappings between enviPath object types.
 }
 \examples{
-\dontshow{
-    username <- Sys.getenv("EP_USERNAME")
-    password <- Sys.getenv("EP_PASSWORD")
-}
-epLogin(username, password)
+\donttest{  
+epLogin("username", "password")
 
 rxn_id <- "2b6bbcc5-77f4-4bed-92a9-731cdc978f6a"
 
 epLink("reaction", "compound", rxn_id)
+}
 }

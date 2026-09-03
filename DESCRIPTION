@@ -3,13 +3,13 @@ Title: R client for enviPath API
 Version: 0.0.0.9000
 Authors@R: 
     person("Giulio", "Benedetti", , "giulio.benedetti@utu.fi", role = c("aut", "cre"))
-Description:
+Description: 
     The environmental pathway database (enviPath) is a key resource for the
     functional annotation and pathway prediction of microbial communities,
     providing knowledge on biotransformation pathways along with the chemical
     reactions and produced compounds. This package enables the programmatic
     access to enviPath by porting the database API from R.
-Imports:
+Imports: 
     BiocParallel,
     httr2,
     stats,
@@ -20,5 +20,6 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 8.0.0
 Suggests: 
+    httptest2,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3

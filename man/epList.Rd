@@ -18,13 +18,11 @@ A data frame.
 epList returns a list with info on objects available in enviPath.
 }
 \examples{
-\dontshow{
-    username <- Sys.getenv("EP_USERNAME")
-    password <- Sys.getenv("EP_PASSWORD")
-}
-epLogin(username, password)
+\donttest{
+epLogin("username", "password")
 
 epList("package")
 
 epList("pathway", pkg = "32de3cf4-e3e6-4168-956e-32fa5ddb0ce1")
+}
 }

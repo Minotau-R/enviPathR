@@ -1,12 +1,13 @@
 
-test_that("link", {
+with_mock_dir("httptest/link", {
     
-    epLogin(username, password)
-    
-    types <- c("compound", "inchikey")
-    cpd_id <- "ec87b463-6a3c-4dfa-8b88-4637fc158896"
-    
-    cpd2inchikey <- epLink(types[1], types[2], cpd_id)
-    
-    expect_named(cpd2inchikey, types)
+    test_that("link", {
+        
+        types <- c("compound", "inchikey")
+        cpd_id <- "ec87b463-6a3c-4dfa-8b88-4637fc158896"
+        
+        cpd2inchikey <- epLink(types[1], types[2], cpd_id)
+        
+        expect_named(cpd2inchikey, types)
+    })
 })
