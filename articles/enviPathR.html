@@ -85,12 +85,17 @@ intuitive website, this approach cannot ensure analytical efficiency and
 reproducibility. For this, enviPath provides a REST API through which
 both data retrieval and pathway prediction are possible. The current
 package, enviPathR, offers an R client to the enviPath API and thus
-brings to R practitioners investigating environmental pollution and
-xenobiotic biotransformation.</p>
+brings most of its capabilities to R practitioners studying
+environmental pollution and organic contaminant biotransformation.</p>
 </div>
 <div class="section level2">
 <h2 id="tutorial">Tutorial<a class="anchor" aria-label="anchor" href="#tutorial"></a>
 </h2>
+<p>This section outlines how to use enviPathR for several different
+purposes. While enabling all resource look-up and pathway prediction
+functionality, the package currently lacks the API methods for object
+creation and deletion. That can be added upon request (external
+contributions are also welcome).</p>
 <div class="section level3">
 <h3 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h3>
@@ -114,15 +119,26 @@ used in this tutorial.</p>
 <h3 id="eplogin-log-into-an-envipath-personal-account">
 <code>epLogin</code>: log into an enviPath personal account<a class="anchor" aria-label="anchor" href="#eplogin-log-into-an-envipath-personal-account"></a>
 </h3>
+<p>It is necessary to hold an enviPath account to use the API and thus
+also enviPathR. A free (for academic use) account can be created at the
+<a href="https://envipath.org/" class="external-link">enviPath website</a>. The same login
+credentials can then be passed to <code>epLogin</code>, which keeps you
+permanently logged in unless the cached package cookies are cleared.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Log into your enviPath account</span></span>
 <span><span class="fu"><a href="../reference/epLogin.html">epLogin</a></span><span class="op">(</span><span class="va">username</span>, <span class="va">password</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Hi nature lover, welcome to enviPath!</span></span></code></pre></div>
+<p>After logging in once, all remaining methods work right out the
+box.</p>
 </div>
 <div class="section level3">
 <h3 id="eplist-retrieve-lists-of-objects-from-envipath">
 <code>epList</code>: retrieve lists of objects from enviPath<a class="anchor" aria-label="anchor" href="#eplist-retrieve-lists-of-objects-from-envipath"></a>
 </h3>
+<p>enviPath divides its conceptual or conceptual items into different
+object categories. The available elements for each object type ca be
+explored using <code>epList</code>.</p>
+<p>(Maybe using ariadne, show list of available object types)</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># List available packages</span></span>
 <span><span class="va">pkg_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/epList.html">epList</a></span><span class="op">(</span><span class="st">"package"</span><span class="op">)</span></span>
@@ -299,11 +315,16 @@ used in this tutorial.</p>
 <code>epGet</code>: fetch raw objects from enviPath<a class="anchor" aria-label="anchor" href="#epget-fetch-raw-objects-from-envipath"></a>
 </h3>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">rxn_id</span> <span class="op">&lt;-</span> <span class="st">"2b6bbcc5-77f4-4bed-92a9-731cdc978f6a"</span></span>
+<code class="sourceCode R"><span><span class="co"># Define reaction of interest</span></span>
+<span><span class="va">rxn_id</span> <span class="op">&lt;-</span> <span class="st">"2b6bbcc5-77f4-4bed-92a9-731cdc978f6a"</span></span>
 <span></span>
+<span><span class="co"># Fetch reaction object</span></span>
 <span><span class="va">rxn</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/epGet.html">epGet</a></span><span class="op">(</span><span class="st">"reaction"</span>, <span class="va">rxn_id</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">rxn</span><span class="op">)</span></span>
+<span><span class="co"># View part of reaction data</span></span>
+<span><span class="va">rxn</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; $aliases</span></span>
 <span><span class="co">#&gt; list()</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -325,54 +346,98 @@ used in this tutorial.</p>
 <span><span class="co">#&gt; [1] "https://envipath.org/package/32de3cf4-e3e6-4168-956e-32fa5ddb0ce1/reaction/2b6bbcc5-77f4-4bed-92a9-731cdc978f6a"</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $identifier</span></span>
-<span><span class="co">#&gt; [1] "reaction"</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $medlineRefs</span></span>
+<span><span class="co">#&gt; [1] "reaction"</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Select pathways of interest</span></span>
+<span><span class="va">path_ids</span> <span class="op">&lt;-</span> <span class="va">path_df</span><span class="op">$</span><span class="va">id</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span></span>
+<span></span>
+<span><span class="co"># Fetch multiple pathways</span></span>
+<span><span class="va">paths</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/epGet.html">epGet</a></span><span class="op">(</span><span class="st">"pathway"</span>, init <span class="op">=</span> <span class="va">path_ids</span>, pkg <span class="op">=</span> <span class="va">pkg_id</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># View part of pathway data</span></span>
+<span><span class="va">paths</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">head</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; $`259b990e-d653-4201-9282-04f2c6b05ca0`</span></span>
+<span><span class="co">#&gt; $`259b990e-d653-4201-9282-04f2c6b05ca0`$aliases</span></span>
 <span><span class="co">#&gt; list()</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $multistep</span></span>
+<span><span class="co">#&gt; $`259b990e-d653-4201-9282-04f2c6b05ca0`$completed</span></span>
+<span><span class="co">#&gt; [1] "true"</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $`259b990e-d653-4201-9282-04f2c6b05ca0`$description</span></span>
+<span><span class="co">#&gt; [1] "Uranium (U) is the most common radionuclide contaminant at US Department of Energy facilities (Riley et al., DOE/ER-0547T, 1992). More information on this element can be found at the Web Elements U page. The uranyl ion [U(VI)O2]2+ is a common, soluble form of this element in the environment. Microbes can immobilize uranyl ion in several ways, three of which are shown here. The mineral uraninite, U (IV)O2, is highly insoluble. Microbes can reduce uranyl ion to hydrated uraninite. The reduction can be carried out by a cytochrome-c3 hydrogenase from Desulfovibrio vulgaris ([http://www.ncbi.nlm.nih.gov/pubmed/8285665|Lovley et al., 1993]) and other organisms, as shown in the left-most pathway branch. Reaction A, in the middle branch, can be carried out by Deinococcus radiodurans R1 in the laboratory with concomitant oxidation of the humic acid analog anthranhydroquinone-2,6-disulfonate (AQDSH2) to its quinone form ([http://www.ncbi.nlm.nih.gov/pubmed/10788374|Fredrickson et al., 2000]). Humic acid, a brown-colored mixture of polymers, found in lignite, peat, and soils, is assumed to be the environmental cofactor. Uranyl ion can be precipitated as cell-bound hydrogen uranyl phosphate without change in oxidation state of the uranium, as shown in the right-most pathway branch. This reaction is facilitated by acid phosphatase N from Citrobacter sp. N14 ([http://www.ncbi.nlm.nih.gov/pubmed/9763695|Basnakova et al., 1998])."</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $`259b990e-d653-4201-9282-04f2c6b05ca0`$id</span></span>
+<span><span class="co">#&gt; [1] "https://envipath.org/package/32de3cf4-e3e6-4168-956e-32fa5ddb0ce1/pathway/259b990e-d653-4201-9282-04f2c6b05ca0"</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $`259b990e-d653-4201-9282-04f2c6b05ca0`$isIncremental</span></span>
 <span><span class="co">#&gt; [1] FALSE</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $name</span></span>
-<span><span class="co">#&gt; [1] "Eawag BBD reaction r0014"</span></span>
+<span><span class="co">#&gt; $`259b990e-d653-4201-9282-04f2c6b05ca0`$isPredicted</span></span>
+<span><span class="co">#&gt; [1] FALSE</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $pathways</span></span>
-<span><span class="co">#&gt;                                                                                                               id</span></span>
-<span><span class="co">#&gt; 1 https://envipath.org/package/32de3cf4-e3e6-4168-956e-32fa5ddb0ce1/pathway/c3d1b8d5-9ffb-49b8-a1bf-bf3d7dfd1ac3</span></span>
-<span><span class="co">#&gt;              name reviewStatus identifier</span></span>
-<span><span class="co">#&gt; 1 Tetrahydrofuran     reviewed    pathway</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $products</span></span>
-<span><span class="co">#&gt;         compoundName</span></span>
-<span><span class="co">#&gt; 1 4-Hydroxybutanoate</span></span>
-<span><span class="co">#&gt;                                                                                                                                                               id</span></span>
-<span><span class="co">#&gt; 1 https://envipath.org/package/32de3cf4-e3e6-4168-956e-32fa5ddb0ce1/compound/a41e6b76-b462-49d4-ae42-391ef00bf98c/structure/befe8eeb-e8f8-4b4a-90b1-d0584a75f8cb</span></span>
-<span><span class="co">#&gt;            smiles</span></span>
-<span><span class="co">#&gt; 1 C(CC(=O)[O-])CO</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $references</span></span>
-<span><span class="co">#&gt; $references$rheaReferences</span></span>
+<span><span class="co">#&gt; $`1e7066c2-ff45-44f4-9086-e37db18400df`</span></span>
+<span><span class="co">#&gt; $`1e7066c2-ff45-44f4-9086-e37db18400df`$aliases</span></span>
 <span><span class="co">#&gt; list()</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $references$uniprotCount</span></span>
-<span><span class="co">#&gt; list()</span></span>
+<span><span class="co">#&gt; $`1e7066c2-ff45-44f4-9086-e37db18400df`$completed</span></span>
+<span><span class="co">#&gt; [1] "true"</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $`1e7066c2-ff45-44f4-9086-e37db18400df`$description</span></span>
+<span><span class="co">#&gt; [1] "Many aromatic sulfonates are produced on a multi-ton scale and can be detected in the environment. Hundreds of thousands of kilograms of 2-aminobenzenesulfonic acid are produced for use in the U.S. annually. It is used in organic synthesis and in the manufacture of various dyes and medicines. The initial step in the degradation of 2-aminobenzenesulfonate involves the transport of the compound across the outer membrane of the cell. Alcaligenes sp. O-1 has a selective permeability barrier, allowing three aromatic sulfonates (benzene sulfonate, toluene-4-sulfonate, and 2-aminobenzenesulfonate) to pass through, as described by [http://www.ncbi.nlm.nih.gov/pubmed/8075807|Junker et al. (1994)]. Cell extracts of this species were shown to be capable of degrading at least seven substrates. Deamination of the aromatic ring in strain O-1 has been shown by [http://www.ncbi.nlm.nih.gov/pubmed/8002948|Junker et al. (1994)] to precede desulfurization. Desulfurization of the compound has been shown to precede deamination when degraded by other organisms."</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $`1e7066c2-ff45-44f4-9086-e37db18400df`$id</span></span>
+<span><span class="co">#&gt; [1] "https://envipath.org/package/32de3cf4-e3e6-4168-956e-32fa5ddb0ce1/pathway/1e7066c2-ff45-44f4-9086-e37db18400df"</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $`1e7066c2-ff45-44f4-9086-e37db18400df`$isIncremental</span></span>
+<span><span class="co">#&gt; [1] FALSE</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $`1e7066c2-ff45-44f4-9086-e37db18400df`$isPredicted</span></span>
+<span><span class="co">#&gt; [1] FALSE</span></span></code></pre></div>
+<p>It is also possible to extract specific properties from certain
+object types with the argument <code>property</code>. These include
+pathway edges and nodes and compound structures.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Extract node property from pathway objects</span></span>
+<span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/epGet.html">epGet</a></span><span class="op">(</span><span class="st">"pathway"</span>, init <span class="op">=</span> <span class="va">path_ids</span>, pkg <span class="op">=</span> <span class="va">pkg_id</span>, property <span class="op">=</span> <span class="st">"node"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># View nodes</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">nodes</span><span class="op">)</span></span>
+<span><span class="co">#&gt; $`259b990e-d653-4201-9282-04f2c6b05ca0`</span></span>
+<span><span class="co">#&gt; $`259b990e-d653-4201-9282-04f2c6b05ca0`$node</span></span>
+<span><span class="co">#&gt;                                                                                                                                                         id</span></span>
+<span><span class="co">#&gt; 1 https://envipath.org/package/32de3cf4-e3e6-4168-956e-32fa5ddb0ce1/pathway/259b990e-d653-4201-9282-04f2c6b05ca0/node/dd59cd8c-6e19-4dec-b119-47595607776e</span></span>
+<span><span class="co">#&gt; 2 https://envipath.org/package/32de3cf4-e3e6-4168-956e-32fa5ddb0ce1/pathway/259b990e-d653-4201-9282-04f2c6b05ca0/node/f06d31fa-d9fe-470d-b1b8-72237d1f96e1</span></span>
+<span><span class="co">#&gt; 3 https://envipath.org/package/32de3cf4-e3e6-4168-956e-32fa5ddb0ce1/pathway/259b990e-d653-4201-9282-04f2c6b05ca0/node/b36d17e7-e73f-47f7-8136-b5f357fa7e26</span></span>
+<span><span class="co">#&gt;                        name reviewStatus identifier</span></span>
+<span><span class="co">#&gt; 1 Hydrogen uranyl phosphate     reviewed       node</span></span>
+<span><span class="co">#&gt; 2                 Uraninite     reviewed       node</span></span>
+<span><span class="co">#&gt; 3                Uranyl ion     reviewed       node</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $reviewStatus</span></span>
-<span><span class="co">#&gt; [1] "reviewed"</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $scenarios</span></span>
-<span><span class="co">#&gt; list()</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $smirks</span></span>
-<span><span class="co">#&gt; [1] "C(CCO)C=O&gt;&gt;C(CC(=O)[O-])CO"</span></span></code></pre></div>
+<span><span class="co">#&gt; $`1e7066c2-ff45-44f4-9086-e37db18400df`</span></span>
+<span><span class="co">#&gt; $`1e7066c2-ff45-44f4-9086-e37db18400df`$node</span></span>
+<span><span class="co">#&gt;                                                                                                                                                         id</span></span>
+<span><span class="co">#&gt; 1 https://envipath.org/package/32de3cf4-e3e6-4168-956e-32fa5ddb0ce1/pathway/1e7066c2-ff45-44f4-9086-e37db18400df/node/85cfcbd7-1f89-49b9-a3a6-725a54920a01</span></span>
+<span><span class="co">#&gt; 2 https://envipath.org/package/32de3cf4-e3e6-4168-956e-32fa5ddb0ce1/pathway/1e7066c2-ff45-44f4-9086-e37db18400df/node/9838a66c-c9c1-4155-a5cc-5c4705dd817c</span></span>
+<span><span class="co">#&gt; 3 https://envipath.org/package/32de3cf4-e3e6-4168-956e-32fa5ddb0ce1/pathway/1e7066c2-ff45-44f4-9086-e37db18400df/node/739d1209-f196-4038-99df-d92423c94b06</span></span>
+<span><span class="co">#&gt;                      name reviewStatus identifier</span></span>
+<span><span class="co">#&gt; 1         3-Sulfocatechol     reviewed       node</span></span>
+<span><span class="co">#&gt; 2 2-Aminobenzenesulfonate     reviewed       node</span></span>
+<span><span class="co">#&gt; 3       2-Hydroxymuconate     reviewed       node</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="link">Link<a class="anchor" aria-label="anchor" href="#link"></a>
+<h3 id="eplink-map-between-different-types-of-objects">
+<code>epLink</code>: map between different types of objects<a class="anchor" aria-label="anchor" href="#eplink-map-between-different-types-of-objects"></a>
 </h3>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">rxn2cpd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/epLink.html">epLink</a></span><span class="op">(</span><span class="st">"reaction"</span>, <span class="st">"compound"</span>, <span class="va">rxn_id</span><span class="op">)</span></span>
+<p>(Maybe using ariadne, show links between object types)</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Map desired reaction to related compounds (educts and products)</span></span>
+<span><span class="va">rxn2cpd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/epLink.html">epLink</a></span><span class="op">(</span><span class="st">"reaction"</span>, <span class="st">"compound"</span>, <span class="va">rxn_id</span><span class="op">)</span></span>
 <span></span>
+<span><span class="co"># View reaction-to-compound mapping</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">rxn2cpd</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <colgroup>
@@ -394,13 +459,59 @@ used in this tutorial.</p>
 </tr>
 </tbody>
 </table>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Map desired pathways to related compounds (nodes)</span></span>
+<span><span class="va">path2cpd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/epLink.html">epLink</a></span><span class="op">(</span><span class="st">"pathway"</span>, <span class="st">"compound"</span>, init <span class="op">=</span> <span class="va">path_ids</span>, pkg <span class="op">=</span> <span class="va">pkg_id</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># View pathway-to-compound mapping</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">path2cpd</span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">pathway</th>
+<th align="left">compound</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">259b990e-d653-4201-9282-04f2c6b05ca0</td>
+<td align="left">16af63f9-a560-4347-b1ac-4dc28eb7d794</td>
+</tr>
+<tr class="even">
+<td align="left">259b990e-d653-4201-9282-04f2c6b05ca0</td>
+<td align="left">be6e7708-e0c7-4527-87c0-77229f9874b8</td>
+</tr>
+<tr class="odd">
+<td align="left">259b990e-d653-4201-9282-04f2c6b05ca0</td>
+<td align="left">e9511feb-acb6-4a51-94c8-d023c8143c3b</td>
+</tr>
+<tr class="even">
+<td align="left">1e7066c2-ff45-44f4-9086-e37db18400df</td>
+<td align="left">571b2ca8-e29a-4496-9a09-5b3174ad9019</td>
+</tr>
+<tr class="odd">
+<td align="left">1e7066c2-ff45-44f4-9086-e37db18400df</td>
+<td align="left">f2dd6912-097e-47d6-a0aa-8cb2c8ca368b</td>
+</tr>
+<tr class="even">
+<td align="left">1e7066c2-ff45-44f4-9086-e37db18400df</td>
+<td align="left">d753429b-b3af-4944-97d7-8ddd833e92aa</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section level3">
 <h3 id="epmodel-predict-compound-biotransformation-pathways">
 <code>epModel</code>: predict compound biotransformation
 pathways<a class="anchor" aria-label="anchor" href="#epmodel-predict-compound-biotransformation-pathways"></a>
 </h3>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<p>enviPath provides a set of pre-trained models for chemical fate
+prediction and half-life persistence of both known and unknown compounds
+given their SMILES representation. The available models can be retrieved
+with <code>epList</code>.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># List available model settings</span></span>
 <span><span class="va">set_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/epList.html">epList</a></span><span class="op">(</span><span class="st">"setting"</span><span class="op">)</span></span>
 <span></span>
@@ -434,13 +545,18 @@ pathways<a class="anchor" aria-label="anchor" href="#epmodel-predict-compound-bi
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<p>Pathway prediction is performed with <code>epModel</code>, which uses
+the enviFormer model by default. The output list contains two data
+frames representing the nodes (compounds) and edges (reactions) of the
+predicted pathway, respectively.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Define smiles of interest</span></span>
 <span><span class="va">smiles</span> <span class="op">&lt;-</span> <span class="st">"ClC(Cl)=C(Cl)Cl"</span></span>
 <span></span>
 <span><span class="co"># Perform pathway prediction with enviFormer</span></span>
 <span><span class="va">former_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/epModel.html">epModel</a></span><span class="op">(</span><span class="va">smiles</span><span class="op">)</span></span>
 <span></span>
+<span><span class="co"># View compounds in predicted pathway</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">former_out</span><span class="op">$</span><span class="va">nodes</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
@@ -461,8 +577,10 @@ pathways<a class="anchor" aria-label="anchor" href="#epmodel-predict-compound-bi
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">former_out</span><span class="op">$</span><span class="va">edges</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="co"># View reactions in predicted pathway</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">former_out</span><span class="op">$</span><span class="va">edges</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="right">from</th>
@@ -477,7 +595,11 @@ pathways<a class="anchor" aria-label="anchor" href="#epmodel-predict-compound-bi
 <td align="right">0.217735</td>
 </tr></tbody>
 </table>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<p>Different model settings can be specified with the argument
+<code>setting</code>. For example, the PEPPER model can be used which
+also returns half-lime estimates for the predicted degradation
+steps.</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Set id for PEPPER model setting</span></span>
 <span><span class="va">set_name</span> <span class="op">&lt;-</span> <span class="st">"Global Setting - ECC and App Domain - PEPPER"</span></span>
 <span><span class="va">set_id</span> <span class="op">&lt;-</span> <span class="va">set_df</span><span class="op">$</span><span class="va">id</span><span class="op">[</span><span class="va">set_df</span><span class="op">$</span><span class="va">name</span> <span class="op">==</span> <span class="va">set_name</span><span class="op">]</span></span>
@@ -485,6 +607,7 @@ pathways<a class="anchor" aria-label="anchor" href="#epmodel-predict-compound-bi
 <span><span class="co"># Perform pathway prediction with PEPPER</span></span>
 <span><span class="va">pepper_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/epModel.html">epModel</a></span><span class="op">(</span><span class="va">smiles</span>, <span class="va">set_id</span><span class="op">)</span></span>
 <span></span>
+<span><span class="co"># View compounds in predicted pathway</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">pepper_out</span><span class="op">$</span><span class="va">nodes</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
@@ -545,8 +668,10 @@ pathways<a class="anchor" aria-label="anchor" href="#epmodel-predict-compound-bi
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">pepper_out</span><span class="op">$</span><span class="va">edges</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="co"># View reactions in predicted pathway</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">pepper_out</span><span class="op">$</span><span class="va">edges</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <colgroup>
 <col width="5%">
@@ -647,7 +772,11 @@ pathways<a class="anchor" aria-label="anchor" href="#epmodel-predict-compound-bi
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<p>Remarkably, the output of <code>epModel</code> can be directly
+converted to an igraph object and visualised as a pathway graph. For
+simpliciy, the base R plot function is used, but the ggraph package is
+recommended for more advanced graph visualisation.</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Convert model output to igraph object</span></span>
 <span><span class="va">path_graph</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r.igraph.org/reference/graph_from_data_frame.html" class="external-link">graph_from_data_frame</a></span><span class="op">(</span></span>
 <span>    <span class="va">pepper_out</span><span class="op">$</span><span class="va">edges</span>,</span>
@@ -662,7 +791,33 @@ pathways<a class="anchor" aria-label="anchor" href="#epmodel-predict-compound-bi
 <div class="section level2">
 <h2 id="reproducibility">Reproducibility<a class="anchor" aria-label="anchor" href="#reproducibility"></a>
 </h2>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="section level3">
+<h3 id="cite-envipathr">Cite enviPathR<a class="anchor" aria-label="anchor" href="#cite-envipathr"></a>
+</h3>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/citation.html" class="external-link">citation</a></span><span class="op">(</span><span class="st">"enviPathR"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; To cite enviPathR in publications use:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Hafner, J., Lorsbach, T., Schmidt, S., Brydon, L., Dost, K., Zhang,</span></span>
+<span><span class="co">#&gt;   K., Fenner, K., and Wicker, J. (2024). Advancements in</span></span>
+<span><span class="co">#&gt;   biotransformation pathway prediction: enhancements, datasets, and</span></span>
+<span><span class="co">#&gt;   novel functionalities in enviPath. Journal of Cheminformatics, 16(1),</span></span>
+<span><span class="co">#&gt;   93. doi: https://doi.org/10.1186/s13321-024-00881-6</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; A BibTeX entry for LaTeX users is</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   @Article{,</span></span>
+<span><span class="co">#&gt;     title = {Advancements in biotransformation pathway prediction: enhancements, datasets, and novel functionalities in enviPath},</span></span>
+<span><span class="co">#&gt;     author = {Jasmin Hafner and Tim Lorsbach and Sebastian Schmidt and Liam Brydon and Katharina Dost and Kunyang Zhang and Kathrin Fenner and Jörg Wicker},</span></span>
+<span><span class="co">#&gt;     journal = {Journal of Cheminformatics},</span></span>
+<span><span class="co">#&gt;     year = {2024},</span></span>
+<span><span class="co">#&gt;     doi = {https://doi.org/10.1186/s13321-024-00881-6},</span></span>
+<span><span class="co">#&gt;   }</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="session-info">Session info<a class="anchor" aria-label="anchor" href="#session-info"></a>
+</h3>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; R version 4.6.1 (2026-06-24)</span></span>
 <span><span class="co">#&gt; Platform: x86_64-pc-linux-gnu</span></span>
@@ -703,6 +858,7 @@ pathways<a class="anchor" aria-label="anchor" href="#epmodel-predict-compound-bi
 <span><span class="co">#&gt; [31] R6_2.6.1            curl_8.0.0          parallel_4.6.1     </span></span>
 <span><span class="co">#&gt; [34] magrittr_2.0.5      bslib_0.12.0        tools_4.6.1        </span></span>
 <span><span class="co">#&gt; [37] pkgdown_2.2.1       cachem_1.1.0        desc_1.4.3</span></span></code></pre></div>
+</div>
 </div>
   </div>
 
