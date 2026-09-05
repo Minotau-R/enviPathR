@@ -13,9 +13,21 @@
 #' A data frame.
 #' 
 #' @examples
+#' \dontshow{
+#'     username <- Sys.getenv("EP_USERNAME")
+#'     password <- Sys.getenv("EP_PASSWORD")
+#'     
+#'     epLogin(username, password)
+#' 
+#'     library(httptest2)
+#'     start_vignette("httptest/list")
+#' }
 #' epList("package")
 #' 
 #' epList("pathway", pkg = "32de3cf4-e3e6-4168-956e-32fa5ddb0ce1")
+#' \dontshow{
+#'     end_vignette()
+#' }
 NULL
 
 #' @export
@@ -45,7 +57,9 @@ epList <- function(type, pkg = NULL){
     # Remove id prefix
     df$id <- str_remove(df$id, ".*/")
     
-    to_keep <- c("name", "id", "reviewStatus")
+    to_keep <- c("name", "id")
+    # Include review status except for type setting
+    if( type != "setting" ) to_keep <- c(to_keep, "reviewStatus")
     
     if( type == "package" ){
       

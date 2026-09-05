@@ -13,13 +13,13 @@ Bioconductor release version:
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 
-BiocManager::install("mia")
+BiocManager::install("enviPathR")
 ```
 
 Beta version:
 
 ```
-remotes::install_github("Minotau-R/ariadne")
+remotes::install_github("Minotau-R/enviPathR")
 ```
 
 ## References

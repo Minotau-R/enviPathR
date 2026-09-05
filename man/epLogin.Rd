@@ -16,6 +16,9 @@ epLogin lets you perform login to enviPath. An account is required to use the
 enviPath API. (add db link to refs)
 }
 \examples{
-# epLogin("FirstLast", "abc123")
-#> Welcome to enviPath!
+\dontshow{
+    username <- Sys.getenv("EP_USERNAME")
+    password <- Sys.getenv("EP_PASSWORD")
+}
+epLogin(username, password)
 }
