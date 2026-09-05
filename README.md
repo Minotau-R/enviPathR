@@ -1,5 +1,11 @@
 # enviPathR <img src="inst/assets/enviPathR-logo.png" align="right" width="120" />
 
+[![issues](https://img.shields.io/github/issues/Minotau-R/enviPathR)](https://github.com/Minotau-R/enviPathR/issues)
+[![pulls](https://img.shields.io/github/issues-pr/Minotau-R/enviPathR)](https://github.com/Minotau-R/enviPathR/pulls)
+[![R-CMD-check](https://github.com/Minotau-R/enviPathR/workflows/build/badge.svg)](https://github.com/Minotau-R/enviPathR/actions)
+# [![codecov](https://codecov.io/gh/Minotau-R/enviPathR/graph/badge.svg?token=)](https://codecov.io/gh/Minotau-R/enviPathR)
+[![CodeFactor](https://www.codefactor.io/repository/github/minotau-r/envipathr/badge)](https://www.codefactor.io/repository/github/minotau-r/envipathr)
+
 This package provides a client to the enviPath biotransformation database and
 pathway prediction system. It accesses enviPath resources through its [legacy
 API](https://envipath.org/api/legacy/docs#/). A new, faster API is currently
