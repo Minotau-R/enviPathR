@@ -15,7 +15,7 @@ mapping is performed.}
 
 \item{init}{\code{Character vector}. Vector of strings specifying the initial
 values of \code{from} that should be mapped to \code{to}. When null, all
-objects belonging to \code{from} from \code{pkg} are used.
+objects belonging to \code{from} in \code{pkg} are used.
 (Default: \code{NULL})}
 
 \item{pkg}{\code{Character scalar}. String specifying the package from which

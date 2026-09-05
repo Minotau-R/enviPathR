@@ -40,10 +40,15 @@ enviPath resources are accessible via an intuitive website, this approach cannot
 ensure analytical efficiency and reproducibility. For this, enviPath provides
 a REST API through which both data retrieval and pathway prediction are
 possible. The current package, enviPathR, offers an R client to the enviPath API
-and thus brings to R practitioners investigating environmental pollution and
-xenobiotic biotransformation.
+and thus brings most of its capabilities to R practitioners studying
+environmental pollution and organic contaminant biotransformation.
 
 ## Tutorial
+
+This section outlines how to use enviPathR for several different purposes. While
+enabling all resource look-up and pathway prediction functionality, the package
+currently lacks the API methods for object creation and deletion. That can be
+added upon request (external contributions are also welcome).
 
 ### Installation
 
@@ -73,12 +78,26 @@ library(knitr)
 
 ### `epLogin`: log into an enviPath personal account
 
+It is necessary to hold an enviPath account to use the API and thus also
+enviPathR. A free (for academic use) account can be created at the [enviPath
+website](https://envipath.org/). The same login credentials can then be passed
+to `epLogin`, which keeps you permanently logged in unless the cached package
+cookies are cleared.
+
 ```{r login}
 # Log into your enviPath account
 epLogin(username, password)
 ```
 
+After logging in once, all remaining methods work right out the box.
+
 ### `epList`: retrieve lists of objects from enviPath
+
+enviPath divides its conceptual or conceptual items into different object
+categories. The available elements for each object type ca be explored using
+`epList`.
+
+(Maybe using ariadne, show list of available object types)
 
 ```{r list-pkg}
 # List available packages
@@ -113,23 +132,69 @@ Same can be done for all other supported types.
 
 ### `epGet`: fetch raw objects from enviPath
 
-```{r get}
+```{r get-one}
+# Define reaction of interest
 rxn_id <- "2b6bbcc5-77f4-4bed-92a9-731cdc978f6a"
 
+# Fetch reaction object
 rxn <- epGet("reaction", rxn_id)
 
-print(rxn)
+# View part of reaction data
+rxn |>
+    head() |>
+    print()
 ```
 
-### Link
+```{r get-many}
+# Select pathways of interest
+path_ids <- path_df$id[1:2]
 
-```{r link}
+# Fetch multiple pathways
+paths <- epGet("pathway", init = path_ids, pkg = pkg_id)
+
+# View part of pathway data
+paths |>
+    lapply(head) |>
+    print()
+```
+
+It is also possible to extract specific properties from certain object types
+with the argument `property`. These include pathway edges and nodes and compound
+structures.
+
+```{r get-property}
+# Extract node property from pathway objects
+nodes <- epGet("pathway", init = path_ids, pkg = pkg_id, property = "node")
+
+# View nodes
+print(nodes)
+```
+
+### `epLink`: map between different types of objects
+
+(Maybe using ariadne, show links between object types)
+
+```{r link-one}
+# Map desired reaction to related compounds (educts and products)
 rxn2cpd <- epLink("reaction", "compound", rxn_id)
 
+# View reaction-to-compound mapping
 kable(rxn2cpd)
 ```
 
+```{r link-many}
+# Map desired pathways to related compounds (nodes)
+path2cpd <- epLink("pathway", "compound", init = path_ids, pkg = pkg_id)
+
+# View pathway-to-compound mapping
+kable(path2cpd)
+```
+
 ### `epModel`: predict compound biotransformation pathways
+
+enviPath provides a set of pre-trained models for chemical fate prediction and
+half-life persistence of both known and unknown compounds given their SMILES
+representation. The available models can be retrieved with `epList`.
 
 ```{r model-setting}
 # List available model settings
@@ -139,6 +204,10 @@ set_df <- epList("setting")
 kable(set_df)
 ```
 
+Pathway prediction is performed with `epModel`, which uses the enviFormer model
+by default. The output list contains two data frames representing the nodes
+(compounds) and edges (reactions) of the predicted pathway, respectively.
+
 ```{r model-former}
 # Define smiles of interest
 smiles <- "ClC(Cl)=C(Cl)Cl"
@@ -146,9 +215,16 @@ smiles <- "ClC(Cl)=C(Cl)Cl"
 # Perform pathway prediction with enviFormer
 former_out <- epModel(smiles)
 
+# View compounds in predicted pathway
 kable(former_out$nodes)
+
+# View reactions in predicted pathway
 kable(former_out$edges)
 ```
+
+Different model settings can be specified with the argument `setting`. For
+example, the PEPPER model can be used which also returns half-lime estimates for
+the predicted degradation steps.
 
 ```{r model-pepper}
 # Set id for PEPPER model setting
@@ -158,9 +234,17 @@ set_id <- set_df$id[set_df$name == set_name]
 # Perform pathway prediction with PEPPER
 pepper_out <- epModel(smiles, set_id)
 
+# View compounds in predicted pathway
 kable(pepper_out$nodes)
+
+# View reactions in predicted pathway
 kable(pepper_out$edges)
 ```
+
+Remarkably, the output of `epModel` can be directly converted to an igraph
+object and visualised as a pathway graph. For simpliciy, the base R plot
+function is used, but the ggraph package is recommended for more advanced graph
+visualisation.
 
 ```{r model-plot}
 # Convert model output to igraph object
@@ -175,7 +259,14 @@ plot(path_graph)
 
 ## Reproducibility
 
+### Cite enviPathR
+
+```{r}
+citation("enviPathR")
+```
+
+### Session info
+
 ```{r}
 sessionInfo()
 ```
-

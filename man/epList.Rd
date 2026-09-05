@@ -15,7 +15,7 @@ which objects should be listed. When null, all available packages are used.
 (Default: \code{NULL})}
 }
 \value{
-A data frame with all objects belonging to \code{type} from \code{pkg}.
+A data frame with all objects belonging to \code{type} in \code{pkg}.
 }
 \description{
 epList returns a list with info on objects available in enviPath.

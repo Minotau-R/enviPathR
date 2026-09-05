@@ -13,7 +13,7 @@
 #'   (Default: \code{NULL})
 #' 
 #' @returns
-#' A data frame with all objects belonging to \code{type} from \code{pkg}.
+#' A data frame with all objects belonging to \code{type} in \code{pkg}.
 #' 
 #' @examples
 #' \dontshow{

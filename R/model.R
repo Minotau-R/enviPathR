@@ -62,7 +62,7 @@ NULL
 epModel <- function(smiles, setting = NULL){
     
     if( smiles == "" ){
-        stop("'smiles' must be a valid SMILES string.", call. = FALSE)
+        stop("'smiles' must be a valid SMILES representation.", call. = FALSE)
     }
     
     if( is.null(setting) ) setting <- "1d915a48-286a-4394-9693-bfaa187326a5"
