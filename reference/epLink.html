@@ -55,19 +55,26 @@
 
 
 <dl><dt id="arg-from">from<a class="anchor" aria-label="anchor" href="#arg-from"></a></dt>
-<dd><p><code>Character scalar</code>.</p></dd>
+<dd><p><code>Character scalar</code>. String specifying the object type from
+which mapping is performed.</p></dd>
 
 
 <dt id="arg-to">to<a class="anchor" aria-label="anchor" href="#arg-to"></a></dt>
-<dd><p><code>Character scalar</code>.</p></dd>
+<dd><p><code>Character scalar</code>. String specifying the object type to which
+mapping is performed.</p></dd>
 
 
 <dt id="arg-init">init<a class="anchor" aria-label="anchor" href="#arg-init"></a></dt>
-<dd><p><code>Character vector</code>.</p></dd>
+<dd><p><code>Character vector</code>. Vector of strings specifying the initial
+values of <code>from</code> that should be mapped to <code>to</code>. When null, all
+objects belonging to <code>from</code> from <code>pkg</code> are used.
+(Default: <code>NULL</code>)</p></dd>
 
 
 <dt id="arg-pkg">pkg<a class="anchor" aria-label="anchor" href="#arg-pkg"></a></dt>
-<dd><p><code>Character scalar</code>.</p></dd>
+<dd><p><code>Character scalar</code>. String specifying the package from which
+which objects should be mapped When null, EAWAG-BBD is used.
+(Default: <code>NULL</code>)</p></dd>
 
 </dl></div>
     <div id="value">
@@ -77,7 +84,7 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-msg co"><span class="r-pr">#&gt;</span> Hi RiboRings, welcome to enviPath!</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-msg co"><span class="r-pr">#&gt;</span> Hi nature lover, welcome to enviPath!</span>
 <span class="r-in"><span><span class="va">rxn_id</span> <span class="op">&lt;-</span> <span class="st">"2b6bbcc5-77f4-4bed-92a9-731cdc978f6a"</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">epLink</span><span class="op">(</span><span class="st">"reaction"</span>, <span class="st">"compound"</span>, <span class="va">rxn_id</span><span class="op">)</span></span></span>
