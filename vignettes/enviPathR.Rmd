@@ -32,6 +32,17 @@ username <- Sys.getenv("EP_USERNAME")
 password <- Sys.getenv("EP_PASSWORD")
 ```
 
+## Introduction
+
+enviPath is a biotransformation database and pathway prediction system focusing
+on xenobiotic compounds that exacerbate environmental pollution. Although the
+enviPath resources are accessible via an intuitive website, this approach cannot
+ensure analytical efficiency and reproducibility. For this, enviPath provides
+a REST API through which both data retrieval and pathway prediction are
+possible. The current package, enviPathR, offers an R client to the enviPath API
+and thus brings to R practitioners investigating environmental pollution and
+xenobiotic biotransformation.
+
 ## Tutorial
 
 ### Installation
@@ -60,22 +71,27 @@ library(igraph)
 library(knitr)
 ```
 
-### Login
+### `epLogin`: log into an enviPath personal account
 
 ```{r login}
 # Log into your enviPath account
 epLogin(username, password)
 ```
 
-### List
+### `epList`: retrieve lists of objects from enviPath
 
 ```{r list-pkg}
+# List available packages
 pkg_df <- epList("package")
 
+# Select reviewed packages
 to_keep <- pkg_df$reviewStatus == "reviewed"
 pkg_df <- pkg_df[to_keep, ]
 
-# View list
+# Remove lengthy description
+pkg_df$description <- NULL
+
+# View list of packages
 kable(pkg_df)
 ```
 
@@ -87,13 +103,15 @@ pkg_id <- pkg_df$id[pkg_df$name == pkg_name]
 # List pathways from desired package
 path_df <- epList("pathway", pkg = pkg_id)
 
-# View list
-kable(path_df)
+# View list of pathways
+path_df |>
+    head() |>
+    kable()
 ```
 
 Same can be done for all other supported types.
 
-### Get
+### `epGet`: fetch raw objects from enviPath
 
 ```{r get}
 rxn_id <- "2b6bbcc5-77f4-4bed-92a9-731cdc978f6a"
@@ -111,7 +129,7 @@ rxn2cpd <- epLink("reaction", "compound", rxn_id)
 kable(rxn2cpd)
 ```
 
-### Model
+### `epModel`: predict compound biotransformation pathways
 
 ```{r model-setting}
 # List available model settings
@@ -128,7 +146,8 @@ smiles <- "ClC(Cl)=C(Cl)Cl"
 # Perform pathway prediction with enviFormer
 former_out <- epModel(smiles)
 
-former_out
+kable(former_out$nodes)
+kable(former_out$edges)
 ```
 
 ```{r model-pepper}
@@ -139,7 +158,8 @@ set_id <- set_df$id[set_df$name == set_name]
 # Perform pathway prediction with PEPPER
 pepper_out <- epModel(smiles, set_id)
 
-pepper_out
+kable(pepper_out$nodes)
+kable(pepper_out$edges)
 ```
 
 ```{r model-plot}
