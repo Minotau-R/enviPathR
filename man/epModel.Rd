@@ -19,14 +19,13 @@ respectively.
 epGet returns a raw object from enviPath.
 }
 \examples{
-\dontrun{
+\dontshow{
+    username <- Sys.getenv("EP_USERNAME")
+    password <- Sys.getenv("EP_PASSWORD")
+    
+    epLogin(username, password)
+}
 library(igraph)
-
-# Perform login
-epLogin("username", "password")
-
-# List available model settings
-epList("setting")
 
 # Define smiles of interest
 smiles <- "ClC(Cl)=C(Cl)Cl"
@@ -35,10 +34,10 @@ smiles <- "ClC(Cl)=C(Cl)Cl"
 former_out <- epModel(smiles)
 
 # Set id for PEPPER model setting
-setting_id <- "3cda8e56-f4ff-47a8-b68c-4cfcfc4e8c2a"
+set_id <- "3cda8e56-f4ff-47a8-b68c-4cfcfc4e8c2a"
 
 # Perform pathway prediction with PEPPER
-pepper_out <- epModel(smiles, setting_id)
+pepper_out <- epModel(smiles, set_id)
 
 # Convert model output to igraph object
 path_graph <- graph_from_data_frame(
@@ -48,5 +47,4 @@ path_graph <- graph_from_data_frame(
 
 # Visualise predicted pathway
 plot(path_graph)
-}
 }

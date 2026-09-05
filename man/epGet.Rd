@@ -22,11 +22,19 @@ A list of objects
 epGet returns a raw object from enviPath.
 }
 \examples{
-\dontrun{
-epLogin("username", "password")
+\dontshow{
+    username <- Sys.getenv("EP_USERNAME")
+    password <- Sys.getenv("EP_PASSWORD")
+    
+    epLogin(username, password)
 
+    library(httptest2)
+    start_vignette("httptest/get")
+}
 rxn_id <- "2b6bbcc5-77f4-4bed-92a9-731cdc978f6a"
 
 epGet("reaction", rxn_id)
+\dontshow{
+    end_vignette()
 }
 }

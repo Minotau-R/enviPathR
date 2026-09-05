@@ -1,15 +1,20 @@
 Package: enviPathR
 Title: R client for enviPath API
-Version: 0.0.0.9000
-Authors@R: 
-    person("Giulio", "Benedetti", , "giulio.benedetti@utu.fi", role = c("aut", "cre"))
-Description: 
+Version: 0.99.0
+Authors@R:
+    c(person(given = "Giulio", family = "Benedetti", role = c("aut", "cre"),
+          email = "giulio.benedetti@utu.fi",
+          comment = c(ORCID = "0000-0002-8732-7692")))
+Description:
     The environmental pathway database (enviPath) is a key resource for the
     functional annotation and pathway prediction of microbial communities,
     providing knowledge on biotransformation pathways along with the chemical
     reactions and produced compounds. This package enables the programmatic
     access to enviPath by porting the database API from R.
-Imports: 
+biocViews:
+    Software, DataImport, Cheminformatics, Microbiome, Annotation, Pathways,
+    Visualization, Network, GraphAndNetwork
+Imports:
     BiocParallel,
     httr2,
     stats,

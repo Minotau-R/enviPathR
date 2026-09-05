@@ -70,7 +70,7 @@ epLogin(username, password)
 ```{r httpstart, include = FALSE}
 library(httptest2)
 
-start_vignette("httptest")
+start_vignette("httptest/enviPathR")
 ```
 
 ### List
