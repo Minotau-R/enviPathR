@@ -16,7 +16,7 @@ epLogin lets you perform login to enviPath. An account is required to use the
 enviPath API. (add db link to refs)
 }
 \examples{
-\donttest{
+\dontrun{
 epLogin("username", "password")
 }
 }

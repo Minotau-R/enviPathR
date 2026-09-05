@@ -18,7 +18,7 @@ A data frame.
 epList returns a list with info on objects available in enviPath.
 }
 \examples{
-\donttest{
+\dontrun{
 epLogin("username", "password")
 
 epList("package")

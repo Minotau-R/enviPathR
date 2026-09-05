@@ -1,0 +1,172 @@
+---
+title: "enviPathR"
+author:
+  - name: Giulio Benedetti
+    affiliation: University of Turku
+    email: giulio.benedetti@utu.fi
+output:
+    BiocStyle::html_document:
+        fig_height: 7
+        fig_width: 10
+        toc: true
+        toc_float: true
+        toc_depth: 2
+        number_sections: true
+        self_contained: true
+        code_folding: show
+date: "`r doc_date()`"
+package: "`r pkg_ver('enviPathR')`"
+vignette: >
+  %\VignetteIndexEntry{enviPathR: access enviPath and predict pathways from R}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+username <- Sys.getenv("EP_USERNAME")
+password <- Sys.getenv("EP_PASSWORD")
+```
+
+## Tutorial
+
+### Installation
+
+Bioconductor release version:
+
+```
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("enviPathR")
+```
+
+Beta version:
+
+```
+remotes::install_github("Minotau-R/enviPathR")
+```
+
+Then, we can import enviPathR and another couple of optional packages used in
+this tutorial.
+
+```{r setup}
+library(enviPathR)
+library(igraph)
+library(knitr)
+```
+
+### Login
+
+```{r login}
+# Log into your enviPath account
+epLogin(username, password)
+```
+
+```{r httpstart, include = FALSE}
+library(httptest2)
+
+start_vignette("httptest")
+```
+
+### List
+
+```{r list-pkg}
+pkg_df <- epList("package")
+
+to_keep <- pkg_df$reviewStatus == "reviewed"
+pkg_df <- pkg_df[to_keep, ]
+
+# View list
+kable(pkg_df)
+```
+
+```{r list-path}
+# Select desired package
+pkg_name <- "EAWAG-BBD"
+pkg_id <- pkg_df$id[pkg_df$name == pkg_name]
+
+# List pathways from desired package
+path_df <- epList("pathway", pkg = pkg_id)
+
+# View list
+kable(path_df)
+```
+
+Same can be done for all other supported types.
+
+### Get
+
+```{r get}
+rxn_id <- "2b6bbcc5-77f4-4bed-92a9-731cdc978f6a"
+
+rxn <- epGet("reaction", rxn_id)
+
+print(rxn)
+```
+
+### Link
+
+```{r link}
+rxn2cpd <- epLink("reaction", "compound", rxn_id)
+
+kable(rxn2cpd)
+```
+
+### Model
+
+```{r model-setting}
+# List available model settings
+set_df <- epList("setting")
+
+# View list
+kable(set_df)
+```
+
+```{r httpend, include = FALSE}
+end_vignette()
+```
+
+```{r model-former}
+# Define smiles of interest
+smiles <- "ClC(Cl)=C(Cl)Cl"
+
+# Perform pathway prediction with enviFormer
+former_out <- epModel(smiles)
+
+former_out
+```
+
+
+```{r model-pepper}
+# Set id for PEPPER model setting
+set_name <- "Global Setting - ECC and App Domain - PEPPER"
+set_id <- set_df$id[set_df$name == set_name]
+
+# Perform pathway prediction with PEPPER
+pepper_out <- epModel(smiles, set_id)
+
+pepper_out
+```
+
+```{r model-plot}
+# Convert model output to igraph object
+path_graph <- graph_from_data_frame(
+    pepper_out$edges,
+    vertices = pepper_out$nodes
+)
+
+# Visualise predicted pathway
+plot(path_graph)
+```
+
+## Reproducibility
+
+```{r}
+sessionInfo()
+```
+

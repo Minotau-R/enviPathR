@@ -13,7 +13,7 @@
 #' A data frame.
 #' 
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' epLogin("username", "password")
 #' 
 #' epList("package")
@@ -49,7 +49,9 @@ epList <- function(type, pkg = NULL){
     # Remove id prefix
     df$id <- str_remove(df$id, ".*/")
     
-    to_keep <- c("name", "id", "reviewStatus")
+    to_keep <- c("name", "id")
+    # Include review status except for type setting
+    if( type != "setting" ) to_keep <- c(to_keep, "reviewStatus")
     
     if( type == "package" ){
       

@@ -14,7 +14,7 @@
 #' A message upon successful login.
 #' 
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' epLogin("username", "password")
 #' }
 NULL

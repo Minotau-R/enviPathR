@@ -17,7 +17,7 @@
 #' A list of objects
 #' 
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' epLogin("username", "password")
 #' 
 #' rxn_id <- "2b6bbcc5-77f4-4bed-92a9-731cdc978f6a"
