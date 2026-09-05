@@ -38,7 +38,7 @@ password <- Sys.getenv("EP_PASSWORD")
 
 Bioconductor release version:
 
-```
+```{r install-release, eval = FALSE}
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 
@@ -47,7 +47,7 @@ BiocManager::install("enviPathR")
 
 Beta version:
 
-```
+```{r install-devel, eval = FALSE}
 remotes::install_github("Minotau-R/enviPathR")
 ```
 
