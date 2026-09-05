@@ -54,7 +54,7 @@ remotes::install_github("Minotau-R/enviPathR")
 Then, we can import enviPathR and another couple of optional packages used in
 this tutorial.
 
-```{r setup}
+```{r setup, message = FALSE}
 library(enviPathR)
 library(igraph)
 library(knitr)
@@ -65,12 +65,6 @@ library(knitr)
 ```{r login}
 # Log into your enviPath account
 epLogin(username, password)
-```
-
-```{r httpstart, include = FALSE}
-library(httptest2)
-
-start_vignette("httptest/enviPathR")
 ```
 
 ### List
@@ -127,10 +121,6 @@ set_df <- epList("setting")
 kable(set_df)
 ```
 
-```{r httpend, include = FALSE}
-end_vignette()
-```
-
 ```{r model-former}
 # Define smiles of interest
 smiles <- "ClC(Cl)=C(Cl)Cl"
@@ -140,7 +130,6 @@ former_out <- epModel(smiles)
 
 former_out
 ```
-
 
 ```{r model-pepper}
 # Set id for PEPPER model setting

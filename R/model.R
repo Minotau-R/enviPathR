@@ -1,13 +1,17 @@
-#' Predict biotransformation pathways for compounds
+#' Predict compound biotransformation pathways
 #' 
 #' @name epModel
 #' 
 #' @description
-#' epGet returns a raw object from enviPath.
+#' epModel predicts the biotransformation pathway for a compound expressed with
+#' \code{smiles} using the selected model \code{setting}.
 #' 
-#' @param smiles \code{Character vector}.
+#' @param smiles \code{Character vector}. String specifying the smiles of a
+#'   compound, which does not necessarily have to be available in enviPath.
 #' 
-#' @param setting \code{Character scalar}.
+#' @param setting \code{Character scalar}. String specifying the unique
+#'   identifier of a model setting. When null, the enviFormer setting is used.
+#'   (Default: \code{NULL})
 #' 
 #' @returns
 #' A list with two data frames with information on nodes and edges,
@@ -17,10 +21,11 @@
 #' \dontshow{
 #'     username <- Sys.getenv("EP_USERNAME")
 #'     password <- Sys.getenv("EP_PASSWORD")
-#'     
-#'     epLogin(username, password)
 #' }
 #' library(igraph)
+#' 
+#' # Perform login
+#' epLogin(username, password)
 #' 
 #' # Define smiles of interest
 #' smiles <- "ClC(Cl)=C(Cl)Cl"
@@ -28,8 +33,15 @@
 #' # Perform pathway prediction with enviFormer
 #' former_out <- epModel(smiles)
 #' 
+#' # List available model settings
+#' set_df <- epList("setting")
+#' 
+#' # View some model settings
+#' head(set_df)
+#' 
 #' # Set id for PEPPER model setting
-#' set_id <- "3cda8e56-f4ff-47a8-b68c-4cfcfc4e8c2a"
+#' set_name <- "Global Setting - ECC and App Domain - PEPPER"
+#' set_id <- set_df$id[set_df$name == set_name]
 #' 
 #' # Perform pathway prediction with PEPPER
 #' pepper_out <- epModel(smiles, set_id)

@@ -7,19 +7,26 @@
 epGet(type, init = NULL, pkg = NULL, property = NULL)
 }
 \arguments{
-\item{type}{\code{Character scalar}.}
+\item{type}{\code{Character scalar}. String specifying the object type to be
+fetched.}
 
-\item{init}{\code{Character vector}.}
+\item{init}{\code{Character vector}. Vector of strings specifying the initial
+values of \code{type} that should be fetched. When null, all objects
+belonging to \code{type} from \code{pkg} are used. (Default: \code{NULL})}
 
-\item{pkg}{\code{Character scalar}.}
+\item{pkg}{\code{Character scalar}. String specifying the package from which
+which objects should be mapped When null, EAWAG-BBD is used.
+(Default: \code{NULL})}
 
-\item{property}{\code{Character scalar}.}
+\item{property}{\code{Character scalar}. String specifying the property to be
+fetched from the objects. When null, all elements of the objects are
+returned. (Default: \code{NULL})}
 }
 \value{
 A list of objects
 }
 \description{
-epGet returns a raw object from enviPath.
+epGet returns raw objects from enviPath.
 }
 \examples{
 \dontshow{

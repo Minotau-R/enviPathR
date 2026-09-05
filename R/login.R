@@ -4,25 +4,35 @@
 #' 
 #' @description
 #' epLogin lets you perform login to enviPath. An account is required to use the
-#' enviPath API. (add db link to refs)
+#' enviPath API.
 #' 
-#' @param username \code{Character scalar}.
+#' @param username \code{Character scalar}. String specifying the username
+#' used to log into an enviPath personal account.
 #' 
-#' @param password \code{Character scalar}.
+#' @param password \code{Character scalar}. String specifying the password
+#' used to log into an enviPath personal account.
 #' 
 #' @returns
 #' A message upon successful login.
+#' 
+#' @seealso
+#' \itemize{
+#'   \item enviPath front page: \url{https://envipath.org/}
+#'   \item legacy API docs: \url{https://envipath.org/api/legacy/docs#/}
+#' }
 #' 
 #' @examples
 #' \dontshow{
 #'     username <- Sys.getenv("EP_USERNAME")
 #'     password <- Sys.getenv("EP_PASSWORD")
 #' }
+#' # Perform login
 #' epLogin(username, password)
 NULL
 
-#' @importFrom httr2 request req_method req_body_form req_cookie_preserve req_perform
 #' @export
+#' @rdname epLogin
+#' @importFrom httr2 request req_method req_body_form req_cookie_preserve req_perform
 epLogin <- function(username, password){
     # Prepare login request
     req <- request(eP_env$url) |>
@@ -36,6 +46,6 @@ epLogin <- function(username, password){
     # Perform login request
     resp <- req_perform(req)
     # Print message upon successful login
-    message("Hi ", username, ", welcome to enviPath!")
+    message("Hi nature lover, welcome to enviPath!")
     invisible(NULL)
 }

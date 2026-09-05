@@ -7,12 +7,15 @@
 epList(type, pkg = NULL)
 }
 \arguments{
-\item{type}{\code{Character scalar}.}
+\item{type}{\code{Character scalar}. String specifying the object type to
+listed.}
 
-\item{pkg}{\code{Character scalar}.}
+\item{pkg}{\code{Character scalar}. String specifying the package from
+which objects should be listed. When null, all available packages are used.
+(Default: \code{NULL})}
 }
 \value{
-A data frame.
+A data frame with all objects belonging to \code{type} from \code{pkg}.
 }
 \description{
 epList returns a list with info on objects available in enviPath.
@@ -21,16 +24,26 @@ epList returns a list with info on objects available in enviPath.
 \dontshow{
     username <- Sys.getenv("EP_USERNAME")
     password <- Sys.getenv("EP_PASSWORD")
-    
-    epLogin(username, password)
-
-    library(httptest2)
-    start_vignette("httptest/list")
 }
-epList("package")
+# Perform login
+epLogin(username, password)
 
-epList("pathway", pkg = "32de3cf4-e3e6-4168-956e-32fa5ddb0ce1")
-\dontshow{
-    end_vignette()
-}
+# List packages
+pkg_df <- epList("package")
+
+to_keep <- pkg_df$reviewStatus == "reviewed"
+pkg_df <- pkg_df[to_keep, ]
+
+# View some packages
+head(pkg_df)
+
+# Select desired package
+pkg_name <- "EAWAG-BBD"
+pkg_id <- pkg_df$id[pkg_df$name == pkg_name]
+
+# List pathways from desired package
+path_df <- epList("pathway", pkg = pkg_id)
+
+# View some pathways
+head(path_df)
 }

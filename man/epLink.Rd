@@ -7,13 +7,20 @@
 epLink(from, to, init = NULL, pkg = NULL)
 }
 \arguments{
-\item{from}{\code{Character scalar}.}
+\item{from}{\code{Character scalar}. String specifying the object type from
+which mapping is performed.}
 
-\item{to}{\code{Character scalar}.}
+\item{to}{\code{Character scalar}. String specifying the object type to which
+mapping is performed.}
 
-\item{init}{\code{Character vector}.}
+\item{init}{\code{Character vector}. Vector of strings specifying the initial
+values of \code{from} that should be mapped to \code{to}. When null, all
+objects belonging to \code{from} from \code{pkg} are used.
+(Default: \code{NULL})}
 
-\item{pkg}{\code{Character scalar}.}
+\item{pkg}{\code{Character scalar}. String specifying the package from which
+which objects should be mapped When null, EAWAG-BBD is used.
+(Default: \code{NULL})}
 }
 \value{
 A data frame with links between from and to.

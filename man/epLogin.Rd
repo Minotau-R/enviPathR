@@ -3,22 +3,34 @@
 \name{epLogin}
 \alias{epLogin}
 \title{Log into enviPath account}
+\usage{
+epLogin(username, password)
+}
 \arguments{
-\item{username}{\code{Character scalar}.}
+\item{username}{\code{Character scalar}. String specifying the username
+used to log into an enviPath personal account.}
 
-\item{password}{\code{Character scalar}.}
+\item{password}{\code{Character scalar}. String specifying the password
+used to log into an enviPath personal account.}
 }
 \value{
 A message upon successful login.
 }
 \description{
 epLogin lets you perform login to enviPath. An account is required to use the
-enviPath API. (add db link to refs)
+enviPath API.
 }
 \examples{
 \dontshow{
     username <- Sys.getenv("EP_USERNAME")
     password <- Sys.getenv("EP_PASSWORD")
 }
+# Perform login
 epLogin(username, password)
+}
+\seealso{
+\itemize{
+\item enviPath front page: \url{https://envipath.org/}
+\item legacy API docs: \url{https://envipath.org/api/legacy/docs#/}
+}
 }

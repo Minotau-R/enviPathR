@@ -5,13 +5,20 @@
 #' @description
 #' epLink returns mappings between enviPath object types.
 #' 
-#' @param from \code{Character scalar}.
+#' @param from \code{Character scalar}. String specifying the object type from
+#'   which mapping is performed.
 #' 
-#' @param to \code{Character scalar}.
+#' @param to \code{Character scalar}. String specifying the object type to which
+#'   mapping is performed.
 #' 
-#' @param init \code{Character vector}.
+#' @param init \code{Character vector}. Vector of strings specifying the initial
+#'   values of \code{from} that should be mapped to \code{to}. When null, all
+#'   objects belonging to \code{from} from \code{pkg} are used.
+#'   (Default: \code{NULL})
 #' 
-#' @param pkg \code{Character scalar}.
+#' @param pkg \code{Character scalar}. String specifying the package from which
+#'   which objects should be mapped When null, EAWAG-BBD is used.
+#'   (Default: \code{NULL})
 #' 
 #' @returns
 #' A data frame with links between from and to.

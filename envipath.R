@@ -1,12 +1,5 @@
 
-epLogin("X", "Y")
 
-pkg_df <- epList("package")
-
-pkg_name <- "EAWAG-BBD"
-pkg_id <- pkg_df$id[pkg_df$name == pkg_name]
-
-path_df <- epList("pathway", pkg = pkg_id)
 
 path_name <- "Naphthalene"
 path_id <- path_df$id[path_df$name == path_name]
@@ -26,9 +19,8 @@ cpd2path <- epLink("compound", "pathway", cpd_df$id[1:10])
 epLink("pathway", "node", path_df$id[1:10])
 epLink("pathway", "edge", path_df$id[1:10])
 
-# Now giving struct ids (instead of cpd ids)
 epLink("pathway", "compound", path_df$id[1:3])
-# Empty (report)
+
 epLink("pathway", "reaction", path_df$id[1:3])
 
 cpd_name <- "1-Methylnaphthalene"
