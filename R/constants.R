@@ -26,7 +26,7 @@
     eP_env$url <- "https://envipath.org/api/legacy/"
     # Create cache dir
     cache <- R_user_dir("enviPathR", "cache")
-    if( !dir.exists(cache) ) dir.create(cache)
+    if( !dir.exists(cache) ) dir.create(cache, recursive = TRUE)
     # Preserve cookies between requests
     eP_env$cookies <- file.path(cache, "cookies.txt")
     # Add links
