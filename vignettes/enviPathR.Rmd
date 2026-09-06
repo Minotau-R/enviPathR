@@ -173,6 +173,9 @@ origin and target object types, and optional initial values with the argument
 `init`. The latter is recommended to prevent the search from exploding.
 
 ```{r link-one}
+# Define reaction of interest
+rxn_id <- "2b6bbcc5-77f4-4bed-92a9-731cdc978f6a"
+
 # Map desired reaction to related compounds (educts and products)
 rxn2cpd <- epLink("reaction", "compound", init = rxn_id)
 
@@ -203,9 +206,6 @@ It may be useful at times to retrieve raw objects to access their original
 properties. This is done with `epGet`.
 
 ```{r get-one}
-# Define reaction of interest
-rxn_id <- "2b6bbcc5-77f4-4bed-92a9-731cdc978f6a"
-
 # Fetch reaction object
 rxn <- epGet("reaction", rxn_id)
 
