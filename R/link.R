@@ -16,9 +16,9 @@
 #'   objects belonging to \code{from} in \code{pkg} are used.
 #'   (Default: \code{NULL})
 #' 
-#' @param pkg \code{Character scalar}. String specifying the package from which
-#'   which objects should be mapped When null, EAWAG-BBD is used.
-#'   (Default: \code{NULL})
+#' @param pkg \code{Character scalar}. String specifying the unique identifier
+#'   of the package from which objects should be mapped When null, EAWAG-BBD is
+#'   used. (Default: \code{NULL})
 #' 
 #' @returns
 #' A data frame with links between from and to.

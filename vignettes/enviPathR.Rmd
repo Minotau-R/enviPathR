@@ -76,13 +76,47 @@ library(igraph)
 library(knitr)
 ```
 
+### `epTypes`: explore enviPath database structure {# epTypes}
+
+enviPath divides its conceptual and biological items into different object
+categories, which can be navigated with `epTypes`.
+
+```{r types}
+types <- epTypes()
+```
+
+The first element of the output contains a vector of object types that can be
+listed and explored with [`epList`](#epList).
+
+```{r types-listable}
+types$listable
+```
+
+The second element is a data frame with the available links between object
+types that can be retrieved with [`epLink`](#epLink).
+
+```{r types-linkable}
+kable(types$linkable)
+```
+
+The graph structure of the database can be visualised by converting the links to
+an igraph object.
+
+```{r types-plot}
+# Convert edges data frame to igraph object
+ep_graph <- graph_from_data_frame(types$linkable)
+
+# Visualise database graph
+plot(ep_graph)
+```
+
 ### `epLogin`: log into an enviPath personal account
 
 It is necessary to hold an enviPath account to use the API and thus also
 enviPathR. A free (for academic use) account can be created at the [enviPath
-website](https://envipath.org/). The same login credentials can then be passed
-to `epLogin`, which keeps you permanently logged in unless the cached package
-cookies are cleared.
+website](https://envipath.org/){target="_blank"}. The same login credentials can
+then be passed to `epLogin`, which keeps you permanently logged in unless the
+cached package cookies are cleared.
 
 ```{r login}
 # Log into your enviPath account
@@ -91,13 +125,9 @@ epLogin(username, password)
 
 After logging in once, all remaining methods work right out the box.
 
-### `epList`: retrieve lists of objects from enviPath
+### `epList`: retrieve lists of objects from enviPath {# epList}
 
-enviPath divides its conceptual or conceptual items into different object
-categories. The available elements for each object type ca be explored using
-`epList`.
-
-(Maybe using ariadne, show list of available object types)
+The available elements for each object type can be explored using `epList`.
 
 ```{r list-pkg}
 # List available packages
@@ -114,6 +144,11 @@ pkg_df$description <- NULL
 kable(pkg_df)
 ```
 
+By default, objects are listed from all available packages, but objects can be
+listed from a specific package using the argument `pkg`. For example, it is
+possible to retrieve pathways only from the EAWAG-BBD package by providing its
+unique identifier.
+
 ```{r list-path}
 # Select desired package
 pkg_name <- "EAWAG-BBD"
@@ -128,9 +163,44 @@ path_df |>
     kable()
 ```
 
-Same can be done for all other supported types.
+Similarly, the other supported enviPath object types can also be explored this
+way (see #epTypes).
+
+### `epLink`: map between different types of objects {# epLink}
+
+Links between object types can be retrieved with `epLink`, which takes the
+origin and target object types, and optional initial values with the argument
+`init`. The latter is recommended to prevent the search from exploding.
+
+```{r link-one}
+# Map desired reaction to related compounds (educts and products)
+rxn2cpd <- epLink("reaction", "compound", init = rxn_id)
+
+# View reaction-to-compound mapping
+kable(rxn2cpd)
+```
+
+Multiple initial values can also be used, so that the output represents a
+many-to-many mapping.
+
+```{r link-many}
+# Select pathways of interest
+path_ids <- path_df$id[1:2]
+
+# Map desired pathways to related compounds (nodes)
+path2cpd <- epLink("pathway", "compound", init = path_ids, pkg = pkg_id)
+
+# View pathway-to-compound mapping
+kable(path2cpd)
+```
+
+Similarly, the other supported enviPath object types can also be linked this
+way (see #epTypes).
 
 ### `epGet`: fetch raw objects from enviPath
+
+It may be useful at times to retrieve raw objects to access their original
+properties. This is done with `epGet`.
 
 ```{r get-one}
 # Define reaction of interest
@@ -145,10 +215,10 @@ rxn |>
     print()
 ```
 
-```{r get-many}
-# Select pathways of interest
-path_ids <- path_df$id[1:2]
+Multiple initial values can also be input to fetch a list of several different
+objects.
 
+```{r get-many}
 # Fetch multiple pathways
 paths <- epGet("pathway", init = path_ids, pkg = pkg_id)
 
@@ -168,26 +238,6 @@ nodes <- epGet("pathway", init = path_ids, pkg = pkg_id, property = "node")
 
 # View nodes
 print(nodes)
-```
-
-### `epLink`: map between different types of objects
-
-(Maybe using ariadne, show links between object types)
-
-```{r link-one}
-# Map desired reaction to related compounds (educts and products)
-rxn2cpd <- epLink("reaction", "compound", rxn_id)
-
-# View reaction-to-compound mapping
-kable(rxn2cpd)
-```
-
-```{r link-many}
-# Map desired pathways to related compounds (nodes)
-path2cpd <- epLink("pathway", "compound", init = path_ids, pkg = pkg_id)
-
-# View pathway-to-compound mapping
-kable(path2cpd)
 ```
 
 ### `epModel`: predict compound biotransformation pathways
@@ -242,9 +292,8 @@ kable(pepper_out$edges)
 ```
 
 Remarkably, the output of `epModel` can be directly converted to an igraph
-object and visualised as a pathway graph. For simpliciy, the base R plot
-function is used, but the ggraph package is recommended for more advanced graph
-visualisation.
+object and visualised as a pathway graph. Here, the plot function from base R
+is used for simplicity, but the ggraph package is recommended for more advanced graph visualisation.
 
 ```{r model-plot}
 # Convert model output to igraph object
@@ -261,12 +310,12 @@ plot(path_graph)
 
 ### Cite enviPathR
 
-```{r}
+```{r citation}
 citation("enviPathR")
 ```
 
 ### Session info
 
-```{r}
+```{r session-info}
 sessionInfo()
 ```

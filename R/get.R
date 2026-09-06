@@ -12,9 +12,9 @@
 #'   values of \code{type} that should be fetched. When null, all objects
 #'   belonging to \code{type} in \code{pkg} are used. (Default: \code{NULL})
 #' 
-#' @param pkg \code{Character scalar}. String specifying the package from which
-#'   which objects should be mapped When null, EAWAG-BBD is used.
-#'   (Default: \code{NULL})
+#' @param pkg \code{Character scalar}. String specifying the unique identifier
+#'   of the package from which objects should be mapped When null, EAWAG-BBD is
+#'   used. (Default: \code{NULL})
 #' 
 #' @param property \code{Character scalar}. String specifying the property to be
 #'   fetched from the objects. When null, all elements of the objects are

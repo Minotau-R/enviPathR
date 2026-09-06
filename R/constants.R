@@ -1,3 +1,31 @@
+#' Find available enviPath resources
+#' 
+#' @name epTypes
+#' 
+#' @description
+#' epTypes retrieves the set of listable and linkable enviPath object types
+#' 
+#' @returns
+#' A list with two elements:
+#' \itemize{
+#'   \item listable: a character vector of the object types supported by \code{\link{epList}}
+#'   \item linkable: a data frame of links between object types supported by \code{\link{epLink}}
+#' }
+#' 
+#' @examples
+#' # Retrieve available resources
+#' types <- epTypes()
+#' 
+#' # View listable object types
+#' types$listable
+#' 
+#' # View linkable object types
+#' types$linkable
+NULL
+
+.make_ep_dbs <- function(){
+    c("compound", "package", "pathway", "reaction", "rule", "setting")
+}
 
 .make_ep_links <- function(){
     list(
@@ -29,9 +57,27 @@
     if( !dir.exists(cache) ) dir.create(cache, recursive = TRUE)
     # Preserve cookies between requests
     eP_env$cookies <- file.path(cache, "cookies.txt")
+    # Add database types
+    eP_env$dbs <- .make_ep_dbs()
     # Add links
     eP_env$links <- .make_ep_links()
     return(eP_env)
 }
 
 eP_env <- .create_eP_env()
+
+#' @export
+#' @rdname epTypes
+#' @importFrom stringr str_split fixed
+epTypes <- function(){
+    
+    links <- eP_env$links |>
+        names() |>
+        str_split(fixed("2"), simplify = TRUE) |>
+        as.data.frame()
+    
+    colnames(links) <- c("from", "to")
+    
+    out <- list(listable = eP_env$dbs, linkable = links)
+    return(out)
+}

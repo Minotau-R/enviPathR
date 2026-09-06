@@ -8,9 +8,9 @@
 #' @param type \code{Character scalar}. String specifying the object type to
 #'   listed.
 #' 
-#' @param pkg \code{Character scalar}. String specifying the package from
-#'   which objects should be listed. When null, all available packages are used.
-#'   (Default: \code{NULL})
+#' @param pkg \code{Character scalar}. String specifying the unique identifier
+#'   of the package from which objects should be listed. When null, all
+#'   available packages are used. (Default: \code{NULL})
 #' 
 #' @returns
 #' A data frame with all objects belonging to \code{type} in \code{pkg}.
@@ -26,8 +26,12 @@
 #' # List packages
 #' pkg_df <- epList("package")
 #' 
+#' # Select reviewed packages
 #' to_keep <- pkg_df$reviewStatus == "reviewed"
 #' pkg_df <- pkg_df[to_keep, ]
+#' 
+#' # Remove lengthy description
+#' pkg_df$description <- NULL
 #' 
 #' # View some packages
 #' head(pkg_df)
