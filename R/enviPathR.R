@@ -1,26 +1,20 @@
-#' Find available enviPath resources
+#' enviPathR: the R client for the enviPath RESTful API
 #' 
-#' @name epTypes
+#' @name enviPathR
 #' 
 #' @description
-#' epTypes retrieves the set of listable and linkable enviPath object types
+#' The environmental pathway database (enviPath) is a key resource for the
+#' functional annotation and pathway prediction of microbial communities,
+#' providing knowledge on biotransformation pathways along with the chemical
+#' reactions and produced compounds. This package enables the programmatic
+#' access to enviPath by porting the database API from R.
 #' 
-#' @returns
-#' A list with two elements:
+#' @seealso
 #' \itemize{
-#'   \item listable: a character vector of the object types supported by \code{\link{epList}}
-#'   \item linkable: a data frame of links between object types supported by \code{\link{epLink}}
+#'   \item enviPath front page: \url{https://envipath.org/}
+#'   \item legacy API docs: \url{https://envipath.org/api/legacy/docs#/}
 #' }
-#' 
-#' @examples
-#' # Retrieve available resources
-#' types <- epTypes()
-#' 
-#' # View listable object types
-#' types$listable
-#' 
-#' # View linkable object types
-#' types$linkable
+"_PACKAGE"
 NULL
 
 .make_ep_dbs <- function(){
@@ -65,19 +59,3 @@ NULL
 }
 
 eP_env <- .create_eP_env()
-
-#' @export
-#' @rdname epTypes
-#' @importFrom stringr str_split fixed
-epTypes <- function(){
-    
-    links <- eP_env$links |>
-        names() |>
-        str_split(fixed("2"), simplify = TRUE) |>
-        as.data.frame()
-    
-    colnames(links) <- c("from", "to")
-    
-    out <- list(listable = eP_env$dbs, linkable = links)
-    return(out)
-}

@@ -28,9 +28,3 @@ enviPath API.
 # Perform login
 epLogin(username, password)
 }
-\seealso{
-\itemize{
-\item enviPath front page: \url{https://envipath.org/}
-\item legacy API docs: \url{https://envipath.org/api/legacy/docs#/}
-}
-}

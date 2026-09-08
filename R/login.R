@@ -15,12 +15,6 @@
 #' @returns
 #' A message upon successful login.
 #' 
-#' @seealso
-#' \itemize{
-#'   \item enviPath front page: \url{https://envipath.org/}
-#'   \item legacy API docs: \url{https://envipath.org/api/legacy/docs#/}
-#' }
-#' 
 #' @examples
 #' \dontshow{
 #'     username <- Sys.getenv("EP_USERNAME")

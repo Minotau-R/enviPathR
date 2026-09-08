@@ -28,6 +28,7 @@ epModel predicts the biotransformation pathway for a compound expressed with
     password <- Sys.getenv("EP_PASSWORD")
 }
 library(igraph)
+library(ggraph)
 
 # Perform login
 epLogin(username, password)
@@ -59,4 +60,17 @@ path_graph <- graph_from_data_frame(
 
 # Visualise predicted pathway
 plot(path_graph)
+
+# Visualise with ggraph
+ggraph(path_graph, layout = "sugiyama") +
+    geom_edge_link(
+        aes(colour = probability),
+        arrow = arrow(type = "closed")
+    ) +
+    geom_node_point(size = 3) +
+    geom_node_text(aes(label = name), vjust = 2) +
+    scale_edge_colour_continuous(
+        limits = c(0, 1), low = "white", high = "red"
+    ) +
+    theme_graph()
 }

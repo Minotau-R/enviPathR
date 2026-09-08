@@ -2,6 +2,7 @@ destination: docs
 reference:
 - title: Work with enviPath API
 - contents:
+  - enviPathR
   - epTypes
   - epLogin
   - epList
