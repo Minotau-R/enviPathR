@@ -317,7 +317,7 @@ plot(path_graph)
 As mentioned above, ggraph can be used to create more informative visualisations
 including organised layouts and additional aesthetic layers.
 
-```{r model-ggraph}
+```{r model-ggraph, message = FALSE}
 library(ggraph)
 
 ggraph(path_graph, layout = "sugiyama") +
