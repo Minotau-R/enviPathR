@@ -34,14 +34,8 @@ epLink returns mappings between enviPath object types.
     password <- Sys.getenv("EP_PASSWORD")
     
     epLogin(username, password)
-
-    library(httptest2)
-    start_vignette("httptest/link")
 }
 rxn_id <- "2b6bbcc5-77f4-4bed-92a9-731cdc978f6a"
 
 epLink("reaction", "compound", rxn_id)
-\dontshow{
-    end_vignette()
-}
 }
