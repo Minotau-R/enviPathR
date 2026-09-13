@@ -13,5 +13,5 @@ sticker(
     p_color = "black",
     h_fill = "white",
     h_color = "black",
-    filename = "inst/assets/enviPathR-logo.png"
+    filename = "man/figures/enviPathR-logo.png"
 )
